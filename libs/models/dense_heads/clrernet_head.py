@@ -30,7 +30,7 @@ class CLRerHead(nn.Module):
         sample_points=36,
         keypoint=0,
         output_head=None,
-        lsgi_roi=None,
+        PLD=None,
         loss_cls=None,
         loss_bbox=None,
         loss_iou=None,
@@ -55,7 +55,7 @@ class CLRerHead(nn.Module):
         self.global_head = build_attention(output_head)
         self.lsgi = nn.ModuleList()
         for _ in range(refine_layers):
-            self.lsgi.append(build_attention(lsgi_roi))
+            self.lsgi.append(build_attention(PLD))
         self.loss_cls = build_loss(loss_cls)
         self.loss_bbox = build_loss(loss_bbox)
         self.loss_seg = build_loss(loss_seg) if loss_seg["loss_weight"] > 0 else None
@@ -221,7 +221,8 @@ class CLRerHead(nn.Module):
 
         B: batch size, Np: number of priors (anchors), Nr: num_points (rows).
         """
-
+        # torch.save(self.cls_layers.state_dict(), '/data/heyuxing/CLRerNet/cls_layers.pth')
+        # torch.save(self.reg_layers.state_dict(), '/data/heyuxing/CLRerNet/reg_layers.pth')
         batch_size = x[0].shape[0]
         feature_pyramid = list(x[len(x) - self.refine_layers :])
         feature_pyramid.reverse()

@@ -248,19 +248,19 @@ class CulaneDataset(CustomDataset):
         return all_dict
 
     def visualize_lane_lines(self, outputs, input_image_path, output_image_path=None):
-        
+        # 加载原图
         image = cv2.imread(input_image_path)
         if image is None:
             raise FileNotFoundError(f"Image not found at {input_image_path}")
 
-       
+        # 可视化车道线
         for line in outputs:
-            points = list(map(float, line.split()))  
-            points = np.array(points).reshape(-1, 2).astype(int)  
+            points = list(map(float, line.split()))  # 将字符串转为浮点数列表
+            points = np.array(points).reshape(-1, 2).astype(int)  # 转为形状 (N, 2)，并转为整数类型
             for i in range(len(points) - 1):
-                cv2.line(image, tuple(points[i]), tuple(points[i + 1]), color=(0, 255, 0), thickness=2)  
+                cv2.line(image, tuple(points[i]), tuple(points[i + 1]), color=(0, 255, 0), thickness=2)  # 绘制绿色线段
 
-       
+        # 如果指定了输出路径，保存图像
         if output_image_path:
             os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
             cv2.imwrite(output_image_path, image)

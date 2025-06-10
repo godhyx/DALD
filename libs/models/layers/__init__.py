@@ -1,2 +1,2 @@
 from .attentions import CLRHead
-from .lsgi import lsgi_roi
+from .pld import PLDecoder
